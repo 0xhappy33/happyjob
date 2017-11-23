@@ -3,31 +3,27 @@ package com.happycity.project.jobme.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
+import android.util.Log;
 
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.Profile;
-import com.facebook.ProfileTracker;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.happycity.project.jobme.R;
-import com.happycity.project.jobme.common.ActivityUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity{
 
-    CallbackManager callbackManager;
     LoginButton loginButton;
-    AccessTokenTracker accessTokenTracker;
-    ProfileTracker profileTracker;
-
-    String userName="", userEmail="", userID="";
-
-    Bundle bundle;
+    CallbackManager callbackManager;
 
 
     @Override
@@ -35,20 +31,39 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
+
+        loginButton = findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
+
         callbackManager = CallbackManager.Factory.create();
-        initFacebook();
-        init();
-        addEvents();
 
-    }
-
-    private void addEvents() {
-        FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Profile profile = Profile.getCurrentProfile();
-                goToHomePage(profile);
-                Toast.makeText(LoginActivity.this, "Login in ....", Toast.LENGTH_SHORT).show();
+                // Facebook email address
+                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.v("Login response", response.toString());
+                        try{
+                            String email = object.getString("email");
+                            String name = object.getString("name");
+                            String urlImage = object.getJSONObject("picture").getJSONObject("data").getString("url");
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            intent.putExtra("name", name);
+                            intent.putExtra("email", email);
+                            intent.putExtra("url", urlImage);
+                            startActivity(intent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender, birthday,picture.type(small)");
+                graphRequest.setParameters(parameters);
+                graphRequest.executeAsync();
             }
 
             @Override
@@ -60,62 +75,12 @@ public class LoginActivity extends AppCompatActivity{
             public void onError(FacebookException error) {
 
             }
-        };
-        loginButton.setReadPermissions("user_friends");
-        loginButton.registerCallback(callbackManager, callback);
-    }
+        });
 
-    private void initFacebook() {
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken currentToken) {
-
-            }
-        };
-
-        profileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                goToHomePage(currentProfile);
-            }
-        };
-
-        accessTokenTracker.startTracking();
-        profileTracker.startTracking();
-    }
-
-
-    private void init() {
-        loginButton = findViewById(R.id.login_button);
-    }
-
-    private void goToHomePage(Profile profile) {
-        if (profile != null){
-            Intent homeIntent = new Intent(LoginActivity.this, HomeActivity.class);
-            bundle = new Bundle();
-            bundle.putString(ActivityUtils.USER_NAME, profile.getName());
-            bundle.putString(ActivityUtils.USER_AVATAR, profile.getProfilePictureUri(75,75).toString());
-            homeIntent.putExtra(ActivityUtils.HOME_KEY_PUT_EXTRA, bundle);
-            startActivity(homeIntent);
-        }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        Profile profile = Profile.getCurrentProfile();
-        goToHomePage(profile);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        accessTokenTracker.stopTracking();
-        profileTracker.stopTracking();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }
