@@ -13,4 +13,10 @@
     <string name="about_us">About</string>
     <string name="logout">Logout</string>
     <string name="action_search">search</string>
+    <string name="title_activity_job_detail">JobDetailActivity</string>
+    <string name="furama_resort">Part time</string>
+    <string name="title_job">Front end engineer</string>
+    <string name="job_part_time">Job part time</string>
+    <string name="recommend_for_you">Recommend for you</string>
+    <string name="job_for_you">Job for you</string>
 </resources>

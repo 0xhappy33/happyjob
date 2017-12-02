@@ -1,4 +1,4 @@
-package com.happycity.project.jobme.ui;
+package com.happycity.project.jobme.view.ui;
 
 import android.content.Intent;
 import android.os.Bundle;

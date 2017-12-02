@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.happycity.project.jobme"
         minSdkVersion 16
@@ -30,6 +31,8 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:4.3.1'
     compile 'com.github.takusemba:multisnaprecyclerview:1.1.0'
     compile 'com.github.devahamed:multi-view-adapter:1.2.3'
-    // If you want to use data binding
+    // If you want to use TAG_DATA binding
     compile 'com.github.devahamed:multi-view-adapter-databinding:1.2.3'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.android.volley:volley:1.0.0'
 }

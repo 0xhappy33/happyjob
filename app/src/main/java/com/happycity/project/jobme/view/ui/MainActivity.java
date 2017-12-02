@@ -1,4 +1,4 @@
-package com.happycity.project.jobme.ui;
+package com.happycity.project.jobme.view.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.happycity.project.jobme.utils;
+package com.happycity.project.jobme.view.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -8,10 +8,11 @@ import android.widget.Toast;
 /**
  * Created by Ha Truong on 11/23/2017.
  * This is a jobme
- * into the com.happycity.project.jobme.utils
+ * into the com.happycity.project.jobme.view.utils
  */
 
 public class CheckNetworkConnection {
+
     public static boolean haveNetworkConnection(Context context) {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
