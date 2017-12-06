@@ -3,6 +3,7 @@ package com.happycity.project.jobme.view.ui;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -76,8 +77,7 @@ public class HomeActivity extends AppCompatActivity
     TextView txtUserEmail;
     ImageView imgAvatarUser;
 
-    // dialog when search loading
-    ProgressDialog dialog;
+    protected ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,9 @@ public class HomeActivity extends AppCompatActivity
         setupActionBar();
         initView();
         setDataToTextView();
-        getJobListFromServer();
+
+        new GetData().execute();
+
         addTextChangeListener();
         clickItem();
     }
@@ -124,11 +126,7 @@ public class HomeActivity extends AppCompatActivity
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                dialog = ProgressDialog.show(
-                        HomeActivity.this,
-                        "",
-                        ".....",
-                        true);
+
             }
 
             @Override
@@ -148,8 +146,7 @@ public class HomeActivity extends AppCompatActivity
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-                dialog.dismiss();
+            public void afterTextChanged(Editable editable){
             }
         });
     }
@@ -279,4 +276,29 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
+
+    @SuppressLint("StaticFieldLeak")
+    public class GetData extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(HomeActivity.this);
+            progressDialog.setMessage("Đợi tui tí ...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            getJobListFromServer();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+        }
+    }
 }
