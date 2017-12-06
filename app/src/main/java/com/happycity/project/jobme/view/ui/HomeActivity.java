@@ -301,4 +301,20 @@ public class HomeActivity extends AppCompatActivity
             progressDialog.dismiss();
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
 }
