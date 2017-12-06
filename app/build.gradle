@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.happycity.project.jobme"
         minSdkVersion 16
@@ -22,7 +23,21 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.google.android.gms:play-services-maps:11.6.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'com.facebook.android:facebook-login:4.28.0'
+    compile 'com.github.bumptech.glide:glide:4.3.1'
+    compile 'com.github.takusemba:multisnaprecyclerview:1.1.1'
+    compile 'com.github.devahamed:multi-view-adapter:1.2.3'
+    // If you want to use TAG_DATA binding
+    compile 'com.github.devahamed:multi-view-adapter-databinding:1.2.3'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.google.android.gms:play-services-maps:11.6.2'
+    compile 'com.google.android.gms:play-services-location:11.6.2'
 }
