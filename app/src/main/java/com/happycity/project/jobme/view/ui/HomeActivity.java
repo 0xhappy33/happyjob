@@ -1,20 +1,25 @@
 package com.happycity.project.jobme.view.ui;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +34,7 @@ import com.happycity.project.jobme.R;
 import com.happycity.project.jobme.data.api.Constants;
 import com.happycity.project.jobme.data.model.Job;
 import com.happycity.project.jobme.view.adapter.JobsAdapter;
+import com.happycity.project.jobme.view.adapter.RecommendAdapter;
 import com.happycity.project.jobme.view.utils.Server;
 
 import org.json.JSONArray;
@@ -48,10 +54,17 @@ public class HomeActivity extends AppCompatActivity
     View headerView;
 
     EditText search;
+
     ListView rvJobList;
+    RecyclerView rvRecommendJob;
+
     ArrayList<Job> jobArrayList;
+    ArrayList<Job> jobRecommendList;
+
     JobsAdapter jobsAdapter;
-    String id=" ",logo = "", title ="",
+    RecommendAdapter recommendAdapter;
+
+    String id="",logo = "", title ="",
             type="", company ="",
             description="", urls="",
             location="", createAt="";
@@ -59,9 +72,12 @@ public class HomeActivity extends AppCompatActivity
     String url = Server.jobGithub;
 
 
-    TextView txtUserName, txtUserEmail;
+    TextView txtUserName;
+    TextView txtUserEmail;
     ImageView imgAvatarUser;
 
+    // dialog when search loading
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +88,22 @@ public class HomeActivity extends AppCompatActivity
         setDataToTextView();
         getJobListFromServer();
         addTextChangeListener();
+        clickItem();
     }
 
+    private void clickItem() {
+        rvJobList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Job job = jobArrayList.get(i);
+                Intent intent = new Intent(HomeActivity.this, JobDetailActivity.class);
+                intent.putExtra("job", job);
+                startActivity(intent);
+            }
+        });
+    }
+
+    // get data from facebook api profile
     @SuppressLint("SetTextI18n")
     private void setDataToTextView() {
         String name = getIntent().getStringExtra("name");
@@ -94,7 +124,11 @@ public class HomeActivity extends AppCompatActivity
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                dialog = ProgressDialog.show(
+                        HomeActivity.this,
+                        "",
+                        ".....",
+                        true);
             }
 
             @Override
@@ -115,7 +149,7 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                dialog.dismiss();
             }
         });
     }
@@ -148,8 +182,13 @@ public class HomeActivity extends AppCompatActivity
                                     logo,
                                     createAt
                             );
+                            Job jobRecommend = new Job(company, logo);
+                            jobRecommendList.add(jobRecommend);
+
                             jobArrayList.add(job);
+
                             jobsAdapter.notifyDataSetChanged();
+                            recommendAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -173,9 +212,23 @@ public class HomeActivity extends AppCompatActivity
         imgAvatarUser = headerView.findViewById(R.id.imgAvatarUser);
         search = findViewById(R.id.search);
         rvJobList = findViewById(R.id.recyclerViewJob);
+        rvRecommendJob = findViewById(R.id.lvJobRecommend);
+
+        // set horizontal for recycler view recommended jobs
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayout.HORIZONTAL, false);
+        rvRecommendJob.setLayoutManager(layoutManager);
+
+        jobRecommendList = new ArrayList<>();
         jobArrayList = new ArrayList<>();
+
         jobsAdapter = new JobsAdapter(jobArrayList, getApplicationContext());
+        recommendAdapter = new RecommendAdapter(this, jobRecommendList);
+
+        rvRecommendJob.setAdapter(recommendAdapter);
         rvJobList.setAdapter(jobsAdapter);
+
+        //rvRecommendJob.setAdapter(jobsAdapter);
+
     }
 
     public void setupActionBar(){
@@ -202,33 +255,6 @@ public class HomeActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        //MenuItem mSearchMenu = menu.findItem(R.id.action_search);
-        //searchView = (SearchView) MenuItemCompat.getActionView(mSearchMenu);
-        //filterForResults(searchView);
-
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

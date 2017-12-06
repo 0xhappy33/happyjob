@@ -13,10 +13,18 @@
     <string name="about_us">About</string>
     <string name="logout">Logout</string>
     <string name="action_search">search</string>
-    <string name="title_activity_job_detail">JobDetailActivity</string>
+    <string name="title_activity_job_detail">Job Detail</string>
     <string name="furama_resort">Part time</string>
     <string name="title_job">Front end engineer</string>
     <string name="job_part_time">Job part time</string>
     <string name="recommend_for_you">Recommend for you</string>
     <string name="job_for_you">Job for you</string>
+    <string name="search_here">Search here</string>
+    <string name="location">Location</string>
+    <string name="description_detail">Lorem Ipsum has been the industry\'s
+        standard dummy text ever since the 1500s, when an unknown printer
+        took a galley of type and scrambled it to make a type specimen book.
+        It has survived not only five centuries, but also the leap into electronic
+        typesetting, remaining essentially unchanged.</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

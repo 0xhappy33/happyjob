@@ -4,4 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorButtonTypeJob">#F15E5F</color>
+    <color name="colorBackground">#FF7272</color>
+
+    <color name="colorPrimaryLogin">#da4165</color>
+    <color name="colorPrimaryDarkLogin">#E14B4C</color>
+    <color name="colorAccentLogin">#C83636</color>
 </resources>

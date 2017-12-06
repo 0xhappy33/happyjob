@@ -22,5 +22,4 @@ public class Constants {
     public static final String TAG_LOGO= "company_logo";
     public static final String TAG_CREATE_AT= "created_at";
 
-
 }

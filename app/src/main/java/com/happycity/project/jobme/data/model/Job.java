@@ -1,13 +1,14 @@
 package com.happycity.project.jobme.data.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Ha Truong on 11/23/2017.
  * Class Job
  * into the com.happycity.project.jobme.TAG_DATA.model
- *
  */
 
-public class Job {
+public class Job implements Serializable {
     private String title;
     private String location;
     private String type;
@@ -20,11 +21,14 @@ public class Job {
 
     /*
     * Construct Job
-    * @param String owner
-    * @param String content
-    * @param String createdTime
-    * */
+    * @param String name
+    * @param String logo
+    */
 
+    public Job(String name, String logo){
+        this.company = name;
+        this.logo = logo;
+    }
 
     public Job(String title, String location, String type, String description, String company, String url, String logo, String createdAt) {
         this.title = title;
