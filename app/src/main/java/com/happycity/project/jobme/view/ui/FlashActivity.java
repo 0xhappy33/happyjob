@@ -21,6 +21,8 @@ public class FlashActivity extends AppCompatActivity implements Animation.Animat
     @BindView(R.id.imgSplashLogo)
     ImageView imageSplashLogo;
 
+    public static final int SPLASH_TIME_OUT = 2000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +52,7 @@ public class FlashActivity extends AppCompatActivity implements Animation.Animat
                 startActivity(new Intent(FlashActivity.this, LoginActivity.class));
                 finish();
             }
-        }, 2000);
+        }, SPLASH_TIME_OUT);
     }
 
     @Override

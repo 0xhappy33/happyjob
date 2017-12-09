@@ -17,6 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -40,4 +41,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.google.android.gms:play-services-maps:11.6.2'
     compile 'com.google.android.gms:play-services-location:11.6.2'
+    testCompile "org.robolectric:robolectric:3.3.2"
 }
